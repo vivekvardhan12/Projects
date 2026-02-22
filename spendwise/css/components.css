@@ -1,0 +1,200 @@
+/* ============================================================
+   components.css — Reusable UI components:
+   buttons, cards, badges, forms, toast, progress bars
+   ============================================================ */
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  width: 100%;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background: #9070ff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px #7c5cfc44;
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  background: #e74c3c22;
+  color: var(--red);
+  border: 1px solid #e74c3c44;
+}
+
+.btn-danger:hover { background: #e74c3c33; }
+
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-success {
+  background: #2ecc7122;
+  color: var(--green);
+  border: 1px solid #2ecc7144;
+}
+
+.btn-success:hover { background: #2ecc7133; }
+
+/* ─── CARD ─── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* ─── FORM CARD & FORM GROUPS ─── */
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  max-width: 560px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label  { margin-bottom: 6px; }
+.form-group input,
+.form-group select { margin-bottom: 0; }
+
+/* ─── INCOME / EXPENSE TYPE TOGGLE ─── */
+.type-toggle {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.type-btn {
+  flex: 1;
+  padding: 11px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  transition: all .2s;
+}
+
+.type-btn.income.active {
+  background: #2ecc7120;
+  color: var(--green);
+  border-left: 2px solid var(--green);
+}
+
+.type-btn.expense.active {
+  background: #e74c3c20;
+  color: var(--red);
+  border-right: 2px solid var(--red);
+}
+
+/* ─── BADGES ─── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-income  { background: #2ecc7120; color: var(--green); }
+.badge-expense { background: #e74c3c20; color: var(--red); }
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar {
+  height: 6px;
+  background: var(--surface2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .4s ease;
+}
+
+/* ─── TOAST NOTIFICATION ─── */
+#toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--text);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+#toast.show    { transform: none; opacity: 1; }
+#toast.success { border-color: #2ecc7144; }
+#toast.error   { border-color: #e74c3c44; }
+
+/* ─── EMPTY STATE ─── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.empty-state .empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+/* ─── CHART WRAPPER ─── */
+.chart-wrap {
+  position: relative;
+}

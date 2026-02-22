@@ -1,0 +1,135 @@
+/* ============================================================
+   layout.css — App shell: sidebar, main content, pages
+   ============================================================ */
+
+#app {
+  display: none; /* shown after login */
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  padding: 0 24px;
+  margin-bottom: 36px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all .15s;
+  font-size: 13px;
+  color: var(--muted);
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  color: var(--text);
+  background: var(--surface2);
+}
+
+.nav-item.active {
+  color: var(--text);
+  border-left-color: var(--accent);
+  background: var(--surface2);
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.sidebar-username {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  transition: color .15s;
+}
+
+.logout-btn:hover {
+  color: var(--red);
+}
+
+/* ─── MAIN CONTENT ─── */
+.main-content {
+  flex: 1;
+  padding: 36px 40px;
+  overflow-y: auto;
+}
+
+/* ─── PAGES ─── */
+.page {
+  display: none;
+  animation: fadeIn .3s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.page-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .sidebar        { display: none; }
+  .main-content   { padding: 24px 20px; }
+}

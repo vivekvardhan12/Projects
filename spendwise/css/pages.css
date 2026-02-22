@@ -1,0 +1,235 @@
+/* ============================================================
+   pages.css — Page-specific layouts
+   (Dashboard, Transactions, Analytics, Budget)
+   ============================================================ */
+
+/* ─── DASHBOARD ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative glow circle in corner */
+.stat-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--accent-glow, #7c5cfc);
+  opacity: .08;
+  pointer-events: none;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stat-value.income  { color: var(--green); }
+.stat-value.expense { color: var(--red); }
+.stat-value.balance { color: var(--accent); }
+
+.stat-change {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+/* Recent transactions list */
+.recent-tx { list-style: none; }
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tx-item:last-child { border-bottom: none; }
+
+.tx-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tx-info { flex: 1; min-width: 0; }
+
+.tx-name {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-cat   { font-size: 11px; color: var(--muted); }
+
+.tx-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.tx-amount.income  { color: var(--green); }
+.tx-amount.expense { color: var(--red); }
+
+.tx-date {
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+/* ─── TRANSACTIONS PAGE ─── */
+.filters-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: flex-end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-group label { margin-bottom: 0; }
+.filter-group input,
+.filter-group select { margin-bottom: 0; width: auto; }
+
+.tx-table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tx-table-header {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 80px;
+  padding: 12px 20px;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.tx-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 80px;
+  padding: 14px 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+  font-size: 13px;
+}
+
+.tx-row:last-child { border-bottom: none; }
+.tx-row:hover      { background: var(--surface2); }
+
+.tx-count-label {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ─── ANALYTICS PAGE ─── */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.analytics-full {
+  grid-column: 1 / -1;
+}
+
+/* ─── BUDGET PAGE ─── */
+.budget-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.budget-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.budget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.budget-cat { font-size: 14px; font-weight: 500; }
+
+.budget-amounts {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.budget-limit { color: var(--muted); }
+
+.budget-form-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.budget-form-row .form-group { margin-bottom: 0; flex: 1; }
+.budget-form-row input,
+.budget-form-row select      { margin-bottom: 0; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .stats-grid                       { grid-template-columns: 1fr 1fr; }
+  .dashboard-grid, .analytics-grid  { grid-template-columns: 1fr; }
+  .budget-grid                      { grid-template-columns: 1fr 1fr; }
+  .analytics-full                   { grid-column: 1; }
+}

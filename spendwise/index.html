@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spendwise — Expense Tracker</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- ─────────────── AUTH SCREEN ─────────────── -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">Spendwise</div>
+      <div class="auth-sub">Track every rupee. Own your finances.</div>
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form">
+        <div class="form-group">
+          <label>USERNAME</label>
+          <input type="text" id="login-user" placeholder="your_username" />
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" id="login-pass" placeholder="••••••••" />
+        </div>
+        <div class="error-msg" id="login-error" style="display:none"></div>
+        <button class="btn btn-primary" onclick="login()">→ Sign In</button>
+        <p class="demo-hint">Demo: <strong>demo / demo123</strong></p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" style="display:none">
+        <div class="form-group">
+          <label>FULL NAME</label>
+          <input type="text" id="reg-name" placeholder="Alex Johnson" />
+        </div>
+        <div class="form-group">
+          <label>USERNAME</label>
+          <input type="text" id="reg-user" placeholder="alex_j" />
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" id="reg-pass" placeholder="min 6 chars" />
+        </div>
+        <div class="error-msg" id="reg-error" style="display:none"></div>
+        <button class="btn btn-primary" onclick="register()">→ Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────── MAIN APP ─────────────── -->
+  <div id="app">
+    <div class="app-layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">Spendwise</div>
+        <nav>
+          <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+            <span class="nav-icon">◈</span> Dashboard
+          </div>
+          <div class="nav-item" data-page="transactions" onclick="navigate('transactions')">
+            <span class="nav-icon">⇄</span> Transactions
+          </div>
+          <div class="nav-item" data-page="add" onclick="navigate('add')">
+            <span class="nav-icon">⊕</span> Add Transaction
+          </div>
+          <div class="nav-item" data-page="analytics" onclick="navigate('analytics')">
+            <span class="nav-icon">◎</span> Analytics
+          </div>
+          <div class="nav-item" data-page="budget" onclick="navigate('budget')">
+            <span class="nav-icon">⊟</span> Budget
+          </div>
+        </nav>
+        <div class="nav-spacer"></div>
+        <div class="sidebar-user">
+          <div class="sidebar-username" id="sidebar-username"></div>
+          <button class="logout-btn" onclick="logout()">← logout</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+        <!-- DASHBOARD PAGE -->
+        <div class="page active" id="page-dashboard">
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub" id="dash-greeting"></div>
+          <div class="stats-grid">
+            <div class="stat-card" style="--accent-glow:#2ecc71">
+              <div class="stat-label">TOTAL INCOME</div>
+              <div class="stat-value income" id="stat-income">₹0</div>
+              <div class="stat-change" id="stat-income-count"></div>
+            </div>
+            <div class="stat-card" style="--accent-glow:#e74c3c">
+              <div class="stat-label">TOTAL EXPENSES</div>
+              <div class="stat-value expense" id="stat-expense">₹0</div>
+              <div class="stat-change" id="stat-expense-count"></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">NET BALANCE</div>
+              <div class="stat-value balance" id="stat-balance">₹0</div>
+              <div class="stat-change" id="stat-savings-rate"></div>
+            </div>
+            <div class="stat-card" style="--accent-glow:#f39c12">
+              <div class="stat-label">THIS MONTH</div>
+              <div class="stat-value" id="stat-month" style="color:var(--yellow)">₹0</div>
+              <div class="stat-change" id="stat-month-label"></div>
+            </div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-title">Monthly Overview</div>
+              <div class="chart-wrap"><canvas id="chart-monthly" height="220"></canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-title">Recent Transactions</div>
+              <ul class="recent-tx" id="recent-tx-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSACTIONS PAGE -->
+        <div class="page" id="page-transactions">
+          <div class="page-title">Transactions</div>
+          <div class="page-sub">View and filter all your transactions</div>
+          <div class="filters-row">
+            <div class="filter-group">
+              <label>TYPE</label>
+              <select id="filter-type" onchange="renderTransactions()">
+                <option value="all">All</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>CATEGORY</label>
+              <select id="filter-cat" onchange="renderTransactions()">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>FROM</label>
+              <input type="date" id="filter-from" onchange="renderTransactions()" />
+            </div>
+            <div class="filter-group">
+              <label>TO</label>
+              <input type="date" id="filter-to" onchange="renderTransactions()" />
+            </div>
+            <div class="filter-group">
+              <label>SEARCH</label>
+              <input type="text" id="filter-search" placeholder="Search..." oninput="renderTransactions()" style="width:160px" />
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Clear</button>
+          </div>
+          <div class="tx-table">
+            <div class="tx-table-header">
+              <div>DESCRIPTION</div>
+              <div>CATEGORY</div>
+              <div>DATE</div>
+              <div>AMOUNT</div>
+              <div>ACTION</div>
+            </div>
+            <div id="tx-list-body"></div>
+          </div>
+          <div class="tx-count-label" id="tx-count-label"></div>
+        </div>
+
+        <!-- ADD TRANSACTION PAGE -->
+        <div class="page" id="page-add">
+          <div class="page-title">Add Transaction</div>
+          <div class="page-sub">Record a new income or expense</div>
+          <div class="form-card">
+            <div class="type-toggle">
+              <button class="type-btn income active" id="add-type-income" onclick="setType('income')">▲ Income</button>
+              <button class="type-btn expense" id="add-type-expense" onclick="setType('expense')">▼ Expense</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group" style="grid-column:1/-1">
+                <label>DESCRIPTION</label>
+                <input type="text" id="add-desc" placeholder="e.g. Salary, Groceries..." />
+              </div>
+              <div class="form-group">
+                <label>AMOUNT (₹)</label>
+                <input type="number" id="add-amount" placeholder="0.00" min="0" step="0.01" />
+              </div>
+              <div class="form-group">
+                <label>DATE</label>
+                <input type="date" id="add-date" />
+              </div>
+              <div class="form-group">
+                <label>CATEGORY</label>
+                <select id="add-cat"></select>
+              </div>
+              <div class="form-group">
+                <label>NOTE (optional)</label>
+                <input type="text" id="add-note" placeholder="Any extra details..." />
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="addTransaction()">⊕ Add Transaction</button>
+          </div>
+        </div>
+
+        <!-- ANALYTICS PAGE -->
+        <div class="page" id="page-analytics">
+          <div class="page-title">Analytics</div>
+          <div class="page-sub">Visualize your spending patterns</div>
+          <div class="analytics-grid">
+            <div class="card">
+              <div class="card-title">Expense by Category</div>
+              <div class="chart-wrap"><canvas id="chart-pie" height="240"></canvas></div>
+            </div>
+            <div class="card">
+              <div class="card-title">Income vs Expense (6 months)</div>
+              <div class="chart-wrap"><canvas id="chart-bar" height="240"></canvas></div>
+            </div>
+            <div class="card analytics-full">
+              <div class="card-title">Daily Spending Trend</div>
+              <div class="chart-wrap"><canvas id="chart-line" height="160"></canvas></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Top Spending Categories</div>
+            <div id="top-cats"></div>
+          </div>
+        </div>
+
+        <!-- BUDGET PAGE -->
+        <div class="page" id="page-budget">
+          <div class="page-title">Budget Manager</div>
+          <div class="page-sub">Set monthly limits per category</div>
+          <div class="form-card" style="margin-bottom:28px">
+            <div class="card-title" style="margin-bottom:16px">Set Budget Limit</div>
+            <div class="budget-form-row">
+              <div class="form-group">
+                <label>CATEGORY</label>
+                <select id="budget-cat-sel"></select>
+              </div>
+              <div class="form-group">
+                <label>MONTHLY LIMIT (₹)</label>
+                <input type="number" id="budget-amount" placeholder="5000" min="0" />
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="setBudget()" style="margin-bottom:0;width:auto">Save</button>
+            </div>
+          </div>
+          <div class="budget-grid" id="budget-grid"></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast"></div>
+
+  <!-- JS Modules (order matters) -->
+  <script src="js/constants.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/transactions.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/budget.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
